@@ -1,0 +1,15 @@
+---
+  # This playbook is intended to configure the target as a postfix null client to send
+  # important messages to a central email relay
+  
+  # Change hosts to target group
+  - hosts: localhost
+    remote_user: ansible
+    tasks:
+       - name: Update known_hosts for mail server null client
+         known_hosts:
+            name: rmail.wk
+            state: present
+         become: true
+
+

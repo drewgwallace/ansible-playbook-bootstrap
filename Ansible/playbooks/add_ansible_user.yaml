@@ -1,0 +1,59 @@
+---
+  # This playbook will create an ansible user and group, then configure the ansible server for
+  # passwordless ssh logins
+  
+  # host provided in Ansible's 'scripts' directory or passed from terminal
+  - hosts: '{{ host }}' 
+    remote_user: ansible
+    # Fact checking performed later
+    gather_facts: false
+    tasks:
+   
+
+       - name: Ensure Ansible dependencies installed
+         raw: apt-get update && apt-get install -y python python-simplejson
+         become: true
+       
+       # Fact checking performed AFTER python modules installed
+       - name: Gather facts
+         setup: 
+
+       - name: Add Ansible group if not present
+         group:
+            name: ansible
+            state: present
+            #Group assignment performed when ansible user created
+         become: true
+
+       - name: Add Ansible user if not present
+         user:
+            name: ansible
+            comment: "Ansible User"
+            group: ansible
+            groups: sudo
+            update_password: always
+            # ansible_pass provided in Ansible's 'scripts' directory or passed from terminal
+            password: '{{ ansible_pass }}' 
+            createhome: true
+            skeleton: /etc/skel
+            shell: /bin/bash
+            generate_ssh_key: yes
+         become: true
+
+       - name: Add authorized_keys file (will always result in modify w/ updated timestamp) if not present
+         file:
+           state: touch
+           owner: ansible
+           group: ansible
+           mode: 0644
+           path: /home/ansible/.ssh/authorized_keys
+         become: true
+
+
+       - name: Add ansible authorized_key line item if not present
+         lineinfile:
+           path: /home/ansible/.ssh/authorized_keys
+           state: present
+           regexp: 'ansible@ansible'
+           line: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub')  }}"
+         become: true
