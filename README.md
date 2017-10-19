@@ -12,3 +12,6 @@ Playbook and scripts to manage them
 
 Helpful telegraf configurations and lessons learned
 
+## Grafana & InfluxDB
+
+Installation and configuration
