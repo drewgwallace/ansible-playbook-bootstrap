@@ -1,7 +1,7 @@
----
-  # This playbook is intended to configure the target as a postfix null client to send
-  # important messages to a central email relay
-  
+# This playbook is intended to configure the target as a postfix null client to send
+# important messages to a central email relay
+
+---  
   # Change hosts to target group
   - hosts: localhost
     remote_user: ansible

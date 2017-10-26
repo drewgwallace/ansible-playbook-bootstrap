@@ -1,7 +1,7 @@
+# This playbook will create an ansible user and group, then configure the ansible server for
+# passwordless ssh logins
+
 ---
-  # This playbook will create an ansible user and group, then configure the ansible server for
-  # passwordless ssh logins
-  
   # host provided in Ansible's 'scripts' directory or passed from terminal
   - hosts: '{{ host }}' 
     remote_user: ansible
