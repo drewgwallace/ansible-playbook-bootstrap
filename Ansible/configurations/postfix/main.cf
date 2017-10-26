@@ -1,0 +1,7 @@
+inet_interfaces =  loopback-only
+# mydestination=
+# myhostname = HOSTNAME
+# mynetworks=127.0.0.0/8 [::1]/128
+# myorigin = $mydomain
+relayhost = DESTINATION_MAIL_SERVER
+# local_transport=error: local delivery disabled
