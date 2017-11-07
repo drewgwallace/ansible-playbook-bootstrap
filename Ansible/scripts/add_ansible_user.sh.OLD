@@ -1,3 +1,5 @@
+# 2017.11.06 THIS SCRIPT WAS DEPRECATED IN FAVOR OF READING FROM A .INI
+
 #!/bin/bash
 
 echo "This is a bootstrap to add an Ansible user and configure ssh key-based logins"

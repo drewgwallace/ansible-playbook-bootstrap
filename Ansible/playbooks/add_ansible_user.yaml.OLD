@@ -1,19 +1,16 @@
+# 2017.11.06 THIS PLAYBOOK WAS DEPRECATED IN FAVOR OF READING FROM A .ini WITH LOOKUPS
+
 # This playbook will create an ansible user and group, then configure the ansible server for
 # passwordless ssh logins
 
 ---
   # host provided in Ansible's 'scripts' directory or passed from terminal
-  - hosts: "{{ lookup('ini', 'host section=ansible_vars file=/etc/ansible/configurations/add_ansible_user/add_ansible_user.ini') }}"
-    remote_user: "{{ lookup('ini', 'target_user section=ansible_vars file=/etc/ansible/configurations/add_ansible_user/add_ansible_user.ini') }}"
+  - hosts: '{{ host }}' 
+    remote_user: ansible
     # Fact checking performed later
     gather_facts: false
     tasks:
    
-       # This sets the user and password to be used for accessing the target machine, SUDO rights required!
-       - name: "Set ansible username and password facts"
-         set_fact:
-           ansible_ssh_pass: "{{ lookup('ini', 'target_ssh_pass section=ansible_vars file=/etc/ansible/configurations/add_ansible_user/add_ansible_user.ini') }}"
-           ansible_become_pass: "{{ lookup('ini', 'target_ssh_pass section=ansible_vars file=/etc/ansible/configurations/add_ansible_user/add_ansible_user.ini') }}"
 
        - name: Ensure Ansible dependencies installed
          raw: apt-get update && apt-get install -y python python-simplejson
@@ -37,7 +34,8 @@
             group: ansible
             groups: sudo
             update_password: always
-            password: "{{ lookup('ini', 'ansible_pass section=ansible_vars file=/etc/ansible/configurations/add_ansible_user/add_ansible_user.ini') }}"            
+            # ansible_pass provided in Ansible's 'scripts' directory or passed from terminal
+            password: '{{ ansible_pass }}' 
             createhome: true
             skeleton: /etc/skel
             shell: /bin/bash
@@ -59,5 +57,5 @@
            path: /home/ansible/.ssh/authorized_keys
            state: present
            regexp: 'ansible@ansible'
-           line: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
+           line: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub')  }}"
          become: true
