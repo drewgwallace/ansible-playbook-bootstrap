@@ -3,17 +3,30 @@
 
 ---
   # host provided in Ansible's 'scripts' directory or passed from terminal
-  - hosts: "{{ lookup('ini', 'host section=ansible_vars file=/etc/ansible/configurations/add_ansible_user/add_ansible_user.ini') }}"
+  - hosts: "{{ lookup('ini', 'hosts section=ansible_vars file=/etc/ansible/configurations/add_ansible_user/add_ansible_user.ini') }}"
     remote_user: "{{ lookup('ini', 'target_user section=ansible_vars file=/etc/ansible/configurations/add_ansible_user/add_ansible_user.ini') }}"
     # Fact checking performed later
     gather_facts: false
+           
+    vars_prompt:
+
+      # Prompt for target username's password
+      - name: "ansible_ssh_pass"
+        prompt: "Password for the target machine SSH/SUDO"
+        private: yes
+      # Prompt for password to be hashed and used for Ansible's user creation
+      - name: "ansible_user_pass"
+        prompt: "Password for Ansible user to be created"
+        encrypt: "sha512_crypt"
+        private: yes
+
     tasks:
    
-       # This sets the user and password to be used for accessing the target machine, SUDO rights required!
+       
+       # This sets the target username's password to be used as the become password
        - name: "Set ansible username and password facts"
          set_fact:
-           ansible_ssh_pass: "{{ lookup('ini', 'target_ssh_pass section=ansible_vars file=/etc/ansible/configurations/add_ansible_user/add_ansible_user.ini') }}"
-           ansible_become_pass: "{{ lookup('ini', 'target_ssh_pass section=ansible_vars file=/etc/ansible/configurations/add_ansible_user/add_ansible_user.ini') }}"
+           ansible_become_pass: "{{ ansible_ssh_pass }}"
 
        - name: Ensure Ansible dependencies installed
          raw: apt-get update && apt-get install -y python python-simplejson
@@ -24,10 +37,10 @@
          setup: 
 
        - name: Add Ansible group if not present
+         # Group assignment to ansible user performed when ansible user created
          group:
             name: ansible
             state: present
-            #Group assignment performed when ansible user created
          become: true
 
        - name: Add Ansible user if not present
@@ -37,7 +50,7 @@
             group: ansible
             groups: sudo
             update_password: always
-            password: "{{ lookup('ini', 'ansible_pass section=ansible_vars file=/etc/ansible/configurations/add_ansible_user/add_ansible_user.ini') }}"            
+            password: "{{ ansible_user_pass }}"
             createhome: true
             skeleton: /etc/skel
             shell: /bin/bash
