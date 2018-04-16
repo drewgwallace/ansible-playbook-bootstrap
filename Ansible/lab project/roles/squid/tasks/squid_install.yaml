@@ -1,0 +1,13 @@
+---
+# roles/squid/tasks/squid_install.yml: Installation 'squid' role. Called by main.yml
+# Load a variable file based on the OS type, or a default if not found.
+
+- debug: var=ansible_os_family
+
+- name: Install Squid
+  package: 
+    name: "{{ squid_package }}"
+    state: latest
+  # Implied enable service
+  notify: "Start Squid Service"
+

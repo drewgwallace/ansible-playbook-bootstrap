@@ -1,0 +1,10 @@
+---
+
+# Included task to install python MUST happen before setup
+- include_tasks: tasks/python_dep.yaml
+  # when: 
+
+# Gathering facts should happen after dependencies before any other tasks
+- setup:
+
+#- include_tasks: tasks/os_vars.yaml

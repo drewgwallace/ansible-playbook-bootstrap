@@ -1,0 +1,11 @@
+---
+
+- include_tasks: os_vars.yaml
+
+- include_tasks: postfix_install.yaml
+
+- include_tasks: postfix_configure_server.yaml
+  when: server_type == "email"
+
+- include_tasks: postfix_configure_slave.yaml
+  when: postfix_slave == "yes"

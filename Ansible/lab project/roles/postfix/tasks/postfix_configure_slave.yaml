@@ -1,0 +1,12 @@
+---
+
+- name: Regenerate /etc/postfix/main.cf slave file
+  template:
+    dest: /etc/postfix/main.cf
+    src: templates/etc/postfix/main_slave.cf.j2
+    # owner: proxy
+    # group: proxy
+    # backup: yes
+  # with_items: 
+    # - "{{ squid_networks }}"
+  # notify: "Restart Squid Service"

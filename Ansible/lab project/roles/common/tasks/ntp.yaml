@@ -1,0 +1,16 @@
+---
+
+# https://github.com/geerlingguy/ansible-role-ntp/blob/master/tasks/main.yml
+
+- name: Ensure NTP-related packages are installed.
+  package:
+    name: ntp
+    state: latest
+  # Implied enable service
+  notify: "Start NTP Service"
+
+- name: Generate ntp.conf file
+  template:
+    src: "etc/{{ansible_os_family }}.ntp.conf.j2"
+    dest: "/etc/ntp.conf"
+  notify: "Restart NTP Service"

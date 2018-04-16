@@ -26,7 +26,7 @@
 
     - name: Configure postfix mail null configuration /etc/postfix/main.cf
       copy:
-        src: /etc/ansible/configurations/postfix/main.cf
+        src: vars/postfix/main.cf
         dest: /etc/postfix/main.cf
         owner: root
         group: root

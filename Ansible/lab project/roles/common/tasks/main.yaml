@@ -1,0 +1,9 @@
+---
+
+- include_tasks: os_vars.yaml
+
+- include_tasks: timezone.yaml
+
+- include_tasks: ntp.yaml
+
+- include_tasks: postfix_slave.yaml

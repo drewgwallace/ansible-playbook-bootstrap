@@ -1,0 +1,17 @@
+---
+
+- block:
+
+  - name: "Restart Squid Service"
+    service:
+      name: "{{ squid_service }}"
+      state: restarted
+       
+  - name: "Enable Squid Service"
+    service: 
+      name: "{{ squid_service }}"
+      state: started
+      enabled: yes
+    tags: packages
+  
+  become: true

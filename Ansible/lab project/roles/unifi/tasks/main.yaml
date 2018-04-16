@@ -1,0 +1,15 @@
+---
+# The size of the OS must meet minimum requirements, services will complain and not start unifi if too small
+
+
+- include_tasks: os_vars.yaml
+
+- include_tasks: unifi_repo.yaml
+
+- include_tasks: unifi_install.yaml
+
+- include_tasks: iptables_redirect.yaml
+  vars:
+    - dest_http: 8080
+    - dest_https: 8443
+    

@@ -1,0 +1,20 @@
+---
+ 
+- name: Add an Apt signing key
+  apt_key:
+    url: https://dl.ubnt.com/unifi/unifi-repo.gpg 
+    state: present
+    keyring: "/etc/apt/trusted.gpg.d/unifi-repo.gpg"
+    
+# - name: Add an apt key by id from a keyserver
+  # apt_key:
+    # keyserver: keyserver.ubuntu.com
+    # id: 06E85760C0A52C50
+    # state: present    
+    
+- name: "Adding Unifi Apt Repository"
+  apt_repository:
+    repo: deb http://www.ubnt.com/downloads/unifi/debian stable ubiquiti
+    state: present
+    update_cache: yes
+

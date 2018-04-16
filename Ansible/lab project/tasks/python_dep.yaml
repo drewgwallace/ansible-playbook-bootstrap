@@ -1,0 +1,9 @@
+---
+
+# This only works against apt machines, no RHEL!, possibly check os through RAW and fire off that way...
+- name: Install Python 2.x
+  raw: "test -e /usr/bin/python || (apt update && apt install -y python-simplejson)"
+  register: output
+  changed_when: 
+    - output.stdout != ""
+    - output.stdout != "\r\n"

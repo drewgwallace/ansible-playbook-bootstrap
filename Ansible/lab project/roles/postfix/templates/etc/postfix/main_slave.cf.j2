@@ -1,0 +1,3 @@
+inet_interfaces =  loopback-only
+relayhost = {% for item in ansible_play_batch %}{% if hostvars[item].server_type == "email" %}{{ hostvars[item].ansible_fqdn }} {% endif %}{% endfor %}
+

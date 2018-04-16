@@ -1,0 +1,16 @@
+---
+
+- block:
+
+    - name: "Start NTP Service"
+      service:
+       name: "{{ ntp_service }}"
+       state: started
+       enabled: yes
+
+    - name: "Restart NTP Service"
+      service:
+       name: "{{ ntp_service }}"
+       state: restarted
+
+  become: true

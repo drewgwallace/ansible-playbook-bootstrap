@@ -1,0 +1,68 @@
+# Define the target hosts group
+environment:
+
+######################################################
+######################################################
+# Ansible target Hosts
+# example format:
+
+  hosts:
+     # squid:
+       # ansible_host: 192.168.0.2
+       # server_type: "proxy"
+       # squid_networks:
+         # - "192.168.0.0/24"
+         # - "172.16.0.0/16"
+         # - "10.0.0.0/8"
+
+    unifi:
+      ansible_host: 192.168.0.3
+      server_type: "wifi"
+      postfix_slave: "no"
+
+    postfix:
+      ansible_host: 192.168.0.4
+      server_type: "email"
+      smtp_email: admin@example.com
+      smtp_password: "verystrongpassword"
+      smtp_server: smtp.example.com
+      smtp_port: 587
+      smtp_pass: 
+      postfix_networks:
+        # - "192.168.0.0/24"
+        # - "172.16.0.0/16"
+        # - "10.0.0.0/8"
+
+
+######################################################
+######################################################
+# Group Variables
+
+  vars:
+  
+    remote_user: "user"
+    ntp_servers:
+      - "0.us.pool.ntp.org"
+      - "1.us.pool.ntp.org"
+      - "2.us.pool.ntp.org"
+      - "3.us.pool.ntp.org"
+    timezone_locale: "America/Los_Angeles"
+    
+
+######################################################
+######################################################
+# Group Variables - Directories
+
+    log_dir: "logs/"
+
+    
+######################################################
+######################################################
+# Playbook options yes/no to perform action
+
+  # global
+  
+    # provision variable controls ALL tasks related to modification of systems
+    provision: "yes"
+    
+

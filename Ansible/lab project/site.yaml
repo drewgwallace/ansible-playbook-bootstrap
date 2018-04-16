@@ -1,0 +1,80 @@
+---
+# Working against a bare ubuntu image, only work done is networking and installed SSH/SUDO
+# Assumption, servers are part of known_hosts or "export ANSIBLE_HOST_KEY_CHECKING=False"
+
+- hosts: environment
+
+  # become: true
+  # become_method: sudo
+  remote_user: "{{ remote_user }}"
+  gather_facts: False
+  # The serial: command runs an entire playbook before beginning the next, useful for when
+  #   multiple services are hosted on the same server. Other option is --forks=1 from the play invokation
+  serial: 1
+
+  vars_prompt:
+
+    - name: "ansible_ssh_pass"
+      prompt: "Password for the target machine SSH/SUDO"
+      private: yes
+  
+  vars:
+      
+    - ansible_become_pass: "{{ ansible_ssh_pass }}"
+      # ansible_ssh_pass: "{{ ssh_user_pw }}"
+
+  pre_tasks:
+     
+    - include_tasks: tasks/pre_main.yaml
+      become: yes
+     
+  tasks:
+  
+    # Obtain a date timestamp, done first thing to keep a consistent timestamp across the play
+    - set_fact:
+        date_stamp: "{{ '%Y-%m-%d_%H-%M-%S' | strftime }}"
+        # date_fact: "{{lookup('pipe','date +%Y%m%d')}}"
+    # - debug: var=mydate     
+
+
+    - debug: var=server_type
+    - debug: var=ansible_ssh_pass
+    - debug: var=ansible_become_pass
+    - debug: var=inventory_hostname
+    - debug: var=postfix_slave
+
+
+    
+    - block:
+      # Check that server exists, possibly with proxmox state:present?
+      
+      - name: "{{ ansible_nodename }} | Configure Common Tasks"
+        include_role:
+          name: common
+        become: yes
+          
+      - name: "{{ ansible_nodename }} | Configure Squid"
+        include_role:
+          name: squid
+        when: server_type == "proxy"
+        become: yes
+        
+      - name: "{{ ansible_nodename }} | Configure Unifi Controller"
+        include_role:
+          name: unifi
+        when:
+          - server_type == "wifi" 
+          - ansible_os_family = "Debian"
+        become: yes
+
+      # Keep Postfix at the bottom in case a server has two roles, the server role is performed last to overwrite any client role
+      - name: "{{ ansible_nodename }} | Configure Postfix Relay Server"
+        include_role:
+          name: postfix
+        when: server_type == "email"
+        become: yes
+        
+      - debug: msg="{{hostvars[item]['server_type']}}"
+        with_items: "{{ play_hosts }}"
+
+

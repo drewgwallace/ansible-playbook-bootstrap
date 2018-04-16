@@ -1,0 +1,10 @@
+---
+
+- include_tasks: os_vars.yaml
+
+- include_tasks: squid_install.yaml
+  # when: 
+
+- include_tasks: squid_configure.yaml
+  # when: 
+

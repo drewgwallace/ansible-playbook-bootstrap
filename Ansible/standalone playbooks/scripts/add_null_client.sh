@@ -21,7 +21,7 @@ echo
 echo "Attempting..."
 echo
 
-ansible-playbook /etc/ansible/playbooks/add_null_client.yaml -e "ansible_become_pass=$user_pass" --extra-vars=" destination_mail_server=$destination_mail_server mail_recipient=$mail_recipient" -vvvv
+ansible-playbook ../add_null_client.yaml -e "ansible_become_pass=$user_pass" --extra-vars=" destination_mail_server=$destination_mail_server mail_recipient=$mail_recipient" -vvvv
 
 echo
 
