@@ -24,7 +24,7 @@
    
        
        # This sets the target username's password to be used as the become password
-       - name: "Set ansible username and password facts"
+       - name: Set ansible username and password facts
          set_fact:
            ansible_become_pass: "{{ ansible_ssh_pass }}"
 
@@ -39,15 +39,15 @@
        - name: Add Ansible group if not present
          # Group assignment to ansible user performed when ansible user created
          group:
-            name: ansible
+            name: "{{ user_to_create }}"
             state: present
          become: true
 
        - name: Add Ansible user if not present
          user:
-            name: ansible
+            name: "{{ user_to_create }}"
             comment: "Ansible User"
-            group: ansible
+            group: "{{ user_to_create }}"
             groups: sudo
             update_password: always
             password: "{{ ansible_user_pass }}"
@@ -60,17 +60,18 @@
        - name: Add authorized_keys file (will always result in modify w/ updated timestamp) if not present
          file:
            state: touch
-           owner: ansible
-           group: ansible
+           owner: "{{ user_to_create }}"
+           group: "{{ user_to_create }}"
            mode: 0644
-           path: /home/ansible/.ssh/authorized_keys
+           path: /home/"{{ user_to_create }}"/.ssh/authorized_keys
          become: true
 
 
        - name: Add ansible authorized_key line item if not present
          lineinfile:
-           path: /home/ansible/.ssh/authorized_keys
+           path: /home/"{{ user_to_create }}"/.ssh/authorized_keys
            state: present
-           regexp: 'ansible@ansible'
-           line: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
+           # regexp: 'ansible@ansible'
+           insertafter: EOF
+           line: "{{ lookup('file', path_to_ssh_pub_key) }}"
          become: true

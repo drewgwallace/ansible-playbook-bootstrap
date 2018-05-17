@@ -1,15 +1,7 @@
-# DevOps
+## Ansible Playbook
 
-### A set of practical examples of integrating tools from the DevOps toolchain.
+Purpose: Execute this play against a supported server, it will install dependencies, create an "ansible" user and group, then place the executing machines SSH public key into the target's trusted keystore.
 
----
-
-## Ansible
-
-Playbook and scripts to manage them
-
-## Grafana & InfluxDB & Telegraf
-
-For helpful telegraf configurations and lessons learned, [I have moved the guides to a different project](https://github.com/drewgwallace/drewgwallace.github.io/tree/master/_linux/grafana_influxdb_telegraf)
-
-[View it rendered in html](http://drewgwallace.com/linux/grafana_influxdb_telegraf/index)
+Notes:
+    Be sure to populate the vars/add_ansible_user.ini file with your variables.
+    To maintain simplicity, this is really only meant to be run once. Though, it could easily be integrated into idempotent roles with some additional checks, such as the lineinfile to check for the user@server entry in the ssh key.
