@@ -1,5 +1,0 @@
----
-
-- name: "set timezone to {{ timezone_locale }}"
-  timezone:
-    name: "{{ timezone_locale }}"

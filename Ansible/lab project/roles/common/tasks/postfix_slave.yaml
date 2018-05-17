@@ -1,9 +1,0 @@
----
-
-- debug: var=postfix_slave
-
-- name: "{{ ansible_nodename }} | Configure Postfix Relay Server"
-  include_role:
-    name: postfix
-  when: postfix_slave == "yes"
-  # become: yes

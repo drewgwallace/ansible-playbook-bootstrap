@@ -1,4 +1,0 @@
----
-# roles/apache/vars/Ubuntu.yml
-squid_package: squid
-squid_service: squid

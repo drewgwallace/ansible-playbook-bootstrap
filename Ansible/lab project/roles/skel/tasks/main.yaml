@@ -1,5 +1,0 @@
----
-
-- include_tasks: os_vars.yaml
-
-- include_tasks: 

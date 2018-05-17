@@ -1,7 +1,0 @@
----
-# roles/postfix/vars/Ubuntu.yml
-postfix_package: postfix
-
-postfix_service: postfix
-
-postfix_messaging_package: mailutils
