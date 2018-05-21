@@ -3,8 +3,8 @@
 
 ---
   # host provided in Ansible's 'scripts' directory or passed from terminal
-  - hosts: "{{ lookup('ini', 'hosts section=ansible_vars file=vars/add_ansible_user/add_ansible_user.ini') }}"
-    remote_user: "{{ lookup('ini', 'target_user section=ansible_vars file=vars/add_ansible_user/add_ansible_user.ini') }}"
+  - hosts: "{{ lookup('ini', 'hosts section=ansible_vars file=vars/add_ansible_user.ini') }}"
+    remote_user: "{{ lookup('ini', 'target_user section=ansible_vars file=vars/add_ansible_user.ini') }}"
     # Fact checking performed later
     gather_facts: false
            
@@ -27,6 +27,10 @@
        - name: Set ansible username and password facts
          set_fact:
            ansible_become_pass: "{{ ansible_ssh_pass }}"
+           
+       - name: Set ansible user to create
+         set_fact:
+           user_to_create: "{{ lookup('ini', 'user_to_create section=ansible_vars file=vars/add_ansible_user.ini') }}"
 
        - name: Ensure Ansible dependencies installed
          raw: apt-get update && apt-get install -y python python-simplejson
