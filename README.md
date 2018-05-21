@@ -19,6 +19,6 @@
 ----
 
 ## Notes
-  Be sure to populate the vars/add_ansible_user.ini file with your variables.
-  To maintain simplicity, this is really only meant to be run once. Though, it could easily be integrated into idempotent roles with some additional checks, such as the lineinfile to check for the user@server entry in the ssh key.
-  There is an assumption that the remote_user has sudo privileges with the same ssh password.
++Be sure to populate the vars/add_ansible_user.ini file with your variables.
++To maintain simplicity, this is really only meant to be run once. Though, it could easily be integrated into idempotent roles with some additional checks, such as the lineinfile to check for the user@server entry in the ssh key.
++There is an assumption that the remote_user has sudo privileges with the same ssh password.
