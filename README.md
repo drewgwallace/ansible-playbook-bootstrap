@@ -8,11 +8,13 @@
 ----
 
 ## Execution
-    sed -i 's/hosts=.*/hosts=**ALL**/ vars/add_ansible_user.ini'
+<pre>
+    sed -i 's/hosts=.*/hosts=<b>ALL</b>/ vars/add_ansible_user.ini'
     sed -i 's/target_user=.*/target_user=**user**/ vars/add_ansible_user.ini'
     sed -i 's/user_to_create=.*/user_to_create=**ansible**/ vars/add_ansible_user.ini'
     sed -i 's/path_to_ssh_pub_key=.*/path_to_ssh_pub_key=**\/root\/\.ssh\/id_rsa\.pub\/**/' vars/add_ansible_user.ini
     ansible-playbook add_ansible_user.yaml 
+</pre>
 
 ----
 
