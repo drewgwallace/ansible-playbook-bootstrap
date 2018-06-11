@@ -24,7 +24,6 @@
         private: yes
 
     tasks:
-   
        
        # This sets the target username's password to be used as the become password
        - name: Set ansible username and password facts
