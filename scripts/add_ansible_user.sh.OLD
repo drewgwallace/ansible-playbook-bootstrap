@@ -30,4 +30,4 @@ echo
 # echo $username
 # echo $ansible_pass
 
-ansible-playbook /etc/ansible/playbooks/add_ansible_user.yaml -e "ansible_user=$username ansible_ssh_pass=$user_pass ansible_become_pass=$user_pass" --extra-vars=" host=$target ansible_pass=$ansible_pass" -vv
+ansible-playbook /etc/ansible/playbooks/add_ansible_user.yml -e "ansible_user=$username ansible_ssh_pass=$user_pass ansible_become_pass=$user_pass" --extra-vars=" host=$target ansible_pass=$ansible_pass" -vv

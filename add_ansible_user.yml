@@ -1,7 +1,10 @@
-# This playbook will create an ansible user and group, then configure the ansible server for
-# passwordless ssh logins
-
+# Purpose: This playbook will create an ansible user and group,
+# then configure the ansible server for passwordless ssh logins
+# Last Updated: 2018.06.11
+# Notes:
 ---
+
+
   # host provided in Ansible's 'scripts' directory or passed from terminal
   - hosts: "{{ lookup('ini', 'hosts section=ansible_vars file=vars/add_ansible_user.ini') }}"
     remote_user: "{{ lookup('ini', 'target_user section=ansible_vars file=vars/add_ansible_user.ini') }}"
