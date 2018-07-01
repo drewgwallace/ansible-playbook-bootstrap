@@ -1,7 +1,7 @@
 ---
 # Purpose: This playbook will create an ansible user and group,
 # then configure the ansible server for passwordless ssh logins
-# Last Updated: 2018.06.11
+# Last Updated: 2018.07.11
 # Notes:
 
 
