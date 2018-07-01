@@ -63,7 +63,12 @@
             generate_ssh_key: yes
          become: true
 
-       - name: Add authorized_keys file (will always result in modify w/ updated timestamp) if not present
+       - name: Check that the .ssh/authorized_keys exists
+         stat:
+           path: "{{ ansible_env.HOME }}/.ssh/authorized_keys"
+         register: result
+
+       - name: Add authorized_keys file if not present
          file:
            state: touch
            owner: "{{ user_to_create }}"
@@ -71,7 +76,7 @@
            mode: 0644
            path: /home/"{{ user_to_create }}"/.ssh/authorized_keys
          become: true
-
+         when: not result.stat.exists|bool
 
        - name: Add ansible authorized_key line item if not present
          lineinfile:
