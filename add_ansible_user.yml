@@ -1,39 +1,19 @@
 ---
 # Purpose: This playbook will create an ansible user and group,
 # then configure the ansible server for passwordless ssh logins
-# Last Updated: 2018.07.01
+# Last Updated: 2018.09.02
 # Notes:
 
 
   # host provided in Ansible's 'scripts' directory or passed from terminal
-  - hosts: "{{ lookup('ini', 'hosts section=ansible_vars file=vars/add_ansible_user.ini') }}"
-    remote_user: "{{ lookup('ini', 'target_user section=ansible_vars file=vars/add_ansible_user.ini') }}"
+  - hosts: "all"
     # Fact checking performed later
     gather_facts: false
+    become_method: sudo
            
-    vars_prompt:
-
-      # Prompt for target username's password
-      - name: "ansible_ssh_pass"
-        prompt: "Password for the target machine SSH/SUDO"
-        private: yes
-      # Prompt for password to be hashed and used for Ansible's user creation
-      - name: "ansible_user_pass"
-        prompt: "Password for Ansible user to be created"
-        encrypt: "sha512_crypt"
-        private: yes
 
     tasks:
        
-       # This sets the target username's password to be used as the become password
-       - name: Set ansible username and password facts
-         set_fact:
-           ansible_become_pass: "{{ ansible_ssh_pass }}"
-           
-       - name: Set ansible user to create
-         set_fact:
-           user_to_create: "{{ lookup('ini', 'user_to_create section=ansible_vars file=vars/add_ansible_user.ini') }}"
-
        - name: Ensure Ansible dependencies installed
          raw: apt-get update && apt-get install -y python python-simplejson
          become: true
@@ -56,7 +36,8 @@
             group: "{{ user_to_create }}"
             groups: sudo
             update_password: always
-            password: "{{ ansible_user_pass }}"
+            # dependency required for password if needed (pip install passlib)
+            # password: "{{ 'ansible_user_pass'|password_hash('sha512', 65534|random(seed=inventory_hostname)|string) }}"
             createhome: true
             skeleton: /etc/skel
             shell: /bin/bash
@@ -74,15 +55,14 @@
            owner: "{{ user_to_create }}"
            group: "{{ user_to_create }}"
            mode: 0644
-           path: /home/"{{ user_to_create }}"/.ssh/authorized_keys
+           path: "/home/{{ user_to_create }}/.ssh/authorized_keys"
          become: true
          when: not result.stat.exists|bool
 
        - name: Add ansible authorized_key line item if not present
          lineinfile:
-           path: /home/"{{ user_to_create }}"/.ssh/authorized_keys
+           path: "/home/{{ user_to_create }}/.ssh/authorized_keys"
            state: present
-           # regexp: 'ansible@ansible'
            insertafter: EOF
            line: "{{ lookup('file', path_to_ssh_pub_key) }}"
          become: true
